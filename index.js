@@ -16,7 +16,24 @@ server.get('/', (req, res) => {
 
 
 //POST new cohort
-server.post('/api/cohorts')
+server.post('/api/cohorts', (req, res) => {
+    db('cohorts')
+        .insert(req.body)
+        .then( ids => {
+            const id = id[0];
+            db('cohorts')
+            .where({ id })
+            .first()
+            .then( zoo => res.status(201).json(zoo))
+        })
+        .catch( err => res.status(500).json(err));
+})
+
+server.get('/api/cohorts', (req, res) => {
+    db('cohorts')
+        .then( zoos => res.status(200).json(zoos))
+        .catch( err => res.status(500).json(err));
+});
 
 const port = 5000;
 
