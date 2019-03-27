@@ -24,16 +24,36 @@ server.post('/api/cohorts', (req, res) => {
             db('cohorts')
             .where({ id })
             .first()
-            .then( zoo => res.status(201).json(zoo))
+            .then( cohort => res.status(201).json(cohort))
         })
         .catch( err => res.status(500).json(err));
 })
 
+//GET all cohorts
 server.get('/api/cohorts', (req, res) => {
     db('cohorts')
-        .then( zoos => res.status(200).json(zoos))
+        .then( cohorts => res.status(200).json(cohorts))
         .catch( err => res.status(500).json(err));
 });
+
+//GET cohort by id
+server.get('/api/cohorts/:id', (req, res) => {
+    const cohortId = req.params.id;
+
+    db('cohorts')
+        .where({ id: cohortId })
+        .first()
+        .then( cohort => {
+            if (!cohort) {
+                res.status(404).json({ error: `Cohort id #${cohortId} does not exist` })
+            } else {
+                res.status(200).json(cohort)
+            }
+        })
+        .catch( err => res.status(500).json(err));
+});
+
+
 
 const port = 5000;
 
