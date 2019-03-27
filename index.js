@@ -85,6 +85,33 @@ server.delete('/api/cohorts/:id', (req, res) => {
         .catch( err => res.status(500).json(err))
 })
 
+//GET students in a cohort with specified ID
+server.get('/api/cohorts/:id/students', (req, res) => {
+    const cohortId = req.params.id;
+
+    db('students')
+    .where({ cohort_id: cohortId })
+    .first()
+    .then( students => res.status(200).json(students))
+    .catch( err => res.status(500).json(err));
+})
+
+//STRETCH____________________________________________________________
+//POST new student
+server.post('/api/students', (req, res) => {
+    db('students')
+        .insert(req.body)
+        .then( ids => {
+            const id = id[0];
+            db('students')
+            .where({ id })
+            .first()
+            .then( student => res.status(201).json(student))
+        })
+        .catch( err => res.status(500).json(err));
+})
+
+
 
 const port = 5000;
 
