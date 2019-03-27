@@ -3,15 +3,20 @@ const helmet = require('helmet');
 const knex = require('knex');
 const knexConfig = require('./knexfile'); 
 
-const db = knex(knexConfig);
+const db = knex(knexConfig.development);
 
 const server = express();
 
 server.use(express.json());
 server.use(helmet());
 
+server.get('/', (req, res) => {
+    res.send('James Basile: WebDB III Challenge')
+})
 
 
+//POST new cohort
+server.post('/api/cohorts')
 
 const port = 5000;
 
